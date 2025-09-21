@@ -1,0 +1,38 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'login' %}">Home</a></li>
+                
+            </ul>
+        </nav>
+        {% block header %}
+        <h1>Welcome to My Site</h1>
+        {% endblock %}
+    </header>
+
+    <main>
+        {% block content %}
+        <p>This is the default content.</p>
+        {% endblock %}
+    </main>
+
+    <footer>
+        {% block footer %}
+        <p>Footer</p>
+        {% endblock %}
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>
+
