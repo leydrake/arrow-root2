@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from .models import AdminProfile
+from .models import AdminProfile, Visit, Download, AnalyticsSummary
 
 # Register your models here.
 
@@ -24,3 +24,26 @@ class AdminProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'is_admin', 'created_at')
     list_filter = ('is_admin', 'created_at')
     search_fields = ('user__username', 'user__email')
+
+@admin.register(Visit)
+class VisitAdmin(admin.ModelAdmin):
+    list_display = ('ip_address', 'page_url', 'user', 'timestamp')
+    list_filter = ('timestamp', 'user')
+    search_fields = ('ip_address', 'page_url', 'user__username')
+    readonly_fields = ('timestamp',)
+    date_hierarchy = 'timestamp'
+
+@admin.register(Download)
+class DownloadAdmin(admin.ModelAdmin):
+    list_display = ('file_name', 'ip_address', 'user', 'download_count', 'timestamp')
+    list_filter = ('timestamp', 'user')
+    search_fields = ('file_name', 'ip_address', 'user__username')
+    readonly_fields = ('timestamp',)
+    date_hierarchy = 'timestamp'
+
+@admin.register(AnalyticsSummary)
+class AnalyticsSummaryAdmin(admin.ModelAdmin):
+    list_display = ('date', 'total_visits', 'unique_visitors', 'total_downloads', 'unique_downloads')
+    list_filter = ('date',)
+    readonly_fields = ('created_at', 'updated_at')
+    date_hierarchy = 'date'

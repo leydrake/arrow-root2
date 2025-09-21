@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - My Site{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">📊 Analytics Dashboard</a>
+                    <div class="navbar-nav ms-auto">
+                        <a class="btn btn-outline-primary me-2" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="btn btn-outline-secondary me-2" href="/admin/">Admin Panel</a>
+                        <a class="btn btn-outline-danger" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+
+
+    <!-- Top Pages and Downloads -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">🔥 Top Pages</h5>
+                </div>
+                <div class="card-body">
+                    {% if top_pages %}
+                        <div class="list-group">
+                            {% for page in top_pages %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="text-truncate" style="max-width: 300px;" title="{{ page.page_url }}">
+                                        {{ page.page_url }}
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">{{ page.count }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No page visits recorded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">📥 Top Downloads</h5>
+                </div>
+                <div class="card-body">
+                    {% if top_downloads %}
+                        <div class="list-group">
+                            {% for download in top_downloads %}
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="text-truncate" style="max-width: 300px;" title="{{ download.file_name }}">
+                                        {{ download.file_name }}
+                                    </div>
+                                    <span class="badge bg-success rounded-pill">{{ download.count }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No downloads recorded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">🕒 Recent Visits</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_visits %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>IP</th>
+                                        <th>Page</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for visit in recent_visits %}
+                                        <tr>
+                                            <td>{{ visit.ip_address }}</td>
+                                            <td class="text-truncate" style="max-width: 200px;" title="{{ visit.page_url }}">
+                                                {{ visit.page_url }}
+                                            </td>
+                                            <td>{{ visit.timestamp|date:"M d H:i" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recent visits recorded.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">📥 Recent Downloads</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_downloads %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>File</th>
+                                        <th>IP</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for download in recent_downloads %}
+                                        <tr>
+                                            <td class="text-truncate" style="max-width: 150px;" title="{{ download.file_name }}">
+                                                {{ download.file_name }}
+                                            </td>
+                                            <td>{{ download.ip_address }}</td>
+                                            <td>{{ download.timestamp|date:"M d H:i" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recent downloads recorded.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Downloads -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">🧪 Demo Downloads (Tracked)</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Click these links to test download tracking:</p>
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'download' 'sample-document.pdf' %}" class="btn btn-outline-primary">
+                            <i class="bi bi-file-pdf"></i> Sample PDF
+                        </a>
+                        <a href="{% url 'download' 'data-report.xlsx' %}" class="btn btn-outline-success">
+                            <i class="bi bi-file-excel"></i> Data Report
+                        </a>
+                        <a href="{% url 'download' 'presentation.pptx' %}" class="btn btn-outline-warning">
+                            <i class="bi bi-file-ppt"></i> Presentation
+                        </a>
+                        <a href="{% url 'download' 'readme.txt' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-file-text"></i> Readme
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
