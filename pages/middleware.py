@@ -52,3 +52,4 @@ class AnalyticsMiddleware(MiddlewareMixin):
             print(f"Analytics tracking error: {e}")
         
         return None
+
