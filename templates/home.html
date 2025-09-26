@@ -1,0 +1,536 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>GreenNest — Indoor Plants Shop</title>
+
+    <!-- Tailwind CDN (Play/Standalone) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind config for extra utilities -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gn: {
+                            900: '#123018',
+                            800: '#2E7D32',
+                            600: '#4CAF50',
+                            300: '#A5D6A7',
+                            100: '#E8F5E9'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 6px 18px rgba(15, 23, 42, 0.08)'
+                    }
+                }
+            },
+            plugins: []
+        }
+    </script>
+
+    <style>
+        /* small custom for subtle gradient and image masks */
+        .hero-mask {
+            background: linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.85) 70%);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        body{
+                font-family: 'Helvetica', sans-serif;
+        }
+        
+        
+    </style>
+</head>
+<body class="font-poppins text-gray-800 antialiased bg-white">
+
+    <!-- NAV -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <a href="#" class="flex items-center gap-3">
+                        <img src="../static/pictures/main logo.png" alt="logo" class="w-11 h-11 object-contain"/>
+                        <span class="text-lg font-semibold" style="color: #0A3005;">Rooted Knowledge</span>
+                    </a>
+                </div>
+
+                <!-- desktop links -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="#" class="text-sm hover:text-gn-800">Home</a>
+                    <a href="#" class="text-sm hover:text-gn-800">Shop</a>
+                    <a href="#" class="text-sm hover:text-gn-800">Plant Care</a>
+                    <a href="#" class="text-sm hover:text-gn-800">About</a>
+                    <a href="#" class="text-sm hover:text-gn-800">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button aria-label="search" class="hidden sm:inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                        </svg>
+                    </button>
+
+                    <button aria-label="cart" class="hidden sm:inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 7h12l-2-7M16 21a1 1 0 11-2 0 1 1 0 012 0zM8 21a1 1 0 11-2 0 1 1 0 012 0z"/>
+                        </svg>
+                    </button>
+
+                 <a href="/login/" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gn-800 text-white text-sm shadow hover:scale-105 transform transition">Log In</a>
+
+
+                    <!-- mobile hamburger -->
+                    <button id="menuBtn" class="md:hidden p-2 rounded-md ml-1" aria-label="Open menu">
+                        <svg class="w-6 h-6 text-gray-800" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- mobile menu -->
+        <div id="mobileMenu" class="md:hidden border-t border-gray-100 hidden">
+            <div class="px-4 py-4 space-y-2">
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Home</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Shop</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Plant Care</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">About</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+
+        <section class="relative" style="background-image: url(../static/pictures/pic3.jpg); background-size: cover; background-position: center;">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-screen">
+                    <div class="py-10 lg:py-20">
+                        <div class="w-24 h-24 mb-6 rounded-xl bg-cover bg-center"></div>
+                        <p class="text-xl text-white font-bold opacity-0 translate-y-10 transition-all duration-700 ease-out "
+                         data-animate="up">Breathe life into your space</p>
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[200ms]"
+                         data-animate="up">Discover the benefits of arrowroot for everyday living</h1>
+                        <p class="mt-6 text-white max-w-xl opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                         data-animate="up">Explore arrowroot’s uses in food, health, and farming — simple guides and resources to help you learn and grow.</p>
+
+                        <div class="mt-8 flex flex-wrap gap-3 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms] "
+                            data-animate="up">
+                            <a href="#" class="inline-flex items-center px-12 py-3 rounded-full bg-gn-800 text-white font-medium shadow hover:scale-[1.02] transform transition">Learn More</a>
+
+                        </div>
+
+                        <!-- stat cards -->
+                        <!-- <div class="mt-28 grid grid-cols-2 sm:grid-cols-4 gap-4 w-[1300px] h-[110px]">
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">1,900+</div>
+                                <div class="text-xs text-gray-500 mt-1">Happy Plant Lovers</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">8,000+</div>
+                                <div class="text-xs text-gray-500 mt-1">Unique Green Beauties</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">520+</div>
+                                <div class="text-xs text-gray-500 mt-1">Local Greenhouses</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">4.9★</div>
+                                <div class="text-xs text-gray-500 mt-1">Rated by Customers</div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <!-- hero image -->
+                    <div class="relative">
+                        <div class="rounded-2xl overflow-hidden shadow-lg">
+        
+                        </div>
+
+           
+                    </div>
+                </div>
+            </div>
+
+     </section>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                const elements = document.querySelectorAll("[data-animate]");
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                    const el = entry.target;
+                    const direction = el.dataset.animate; // "left", "right", "up", "down"
+                    let hiddenClass = "";
+                    if (direction === "left")  hiddenClass = "-translate-x-10";
+                    if (direction === "right") hiddenClass = "translate-x-10";
+                    if (direction === "up")    hiddenClass = "translate-y-10";
+                    if (direction === "down")  hiddenClass = "-translate-y-10";
+
+                    if (entry.isIntersecting) {
+                        // fade + move
+                        el.classList.add("opacity-100");
+                        if (direction === "left" || direction === "right") el.classList.add("translate-x-0");
+                        if (direction === "up"   || direction === "down")  el.classList.add("translate-y-0");
+                        el.classList.remove("opacity-0", hiddenClass);
+
+                        // scale
+                        if (el.dataset.scale !== undefined) {
+                        el.classList.add("scale-100");
+                        el.classList.remove("scale-50");
+                        }
+                    } else {
+                        // reverse
+                        el.classList.add("opacity-0", hiddenClass);
+                        el.classList.remove("opacity-100", "translate-x-0", "translate-y-0");
+                        if (el.dataset.scale !== undefined) {
+                        el.classList.add("scale-0");
+                        el.classList.remove("scale-100");
+                        }
+                    }
+                    });
+                }, { threshold: 0.4 });
+
+                elements.forEach((el) => observer.observe(el));
+                });
+            </script>
+
+
+
+
+            
+
+            <!-- subtle bottom gradient -->
+            <div class="h-20 hero-mask"></div>
+        </section>
+
+        
+            <!-- ARROWROOT NUTRITION -->
+            <section class="mt-38 ">
+            <div class="max-w-7xl mx-auto px-4 sm:px-16 lg:px-18 ">
+                <h2 class="text-3xl font-bold text-center text-green-700 opacity-0 translate-y-10 transition-all duration-700 ease-out"
+                     data-animate="up" >Arrowroot Nutrition</h2>
+
+                <!-- Center Wrapper -->
+                <div class="relative flex justify-center items-center mt-12">
+
+                <!-- Center Circle with Image -->
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]
+                    scale-0 transition-transform duration-500 ease-out"
+                    data-animate="up" data-scale>
+                    <img src="../static/pictures/pic8.jpg" alt="Arrowroot" class="object-contain w-[500px] h-[500px]" />
+                </div>
+
+
+                <!-- Circular Labels -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-full h-full relative">
+
+                    <!-- Calories (Top Center) -->
+                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-center opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[200ms]"
+                     data-animate="up">
+                        <h4 class="font-bold text-orange-600 text-6xl">Calories</h4>
+                        <p class="text-gray-700 text-xl">357 kcal</p>
+                    </div>
+
+                    <!-- Vitamin B5 (Upper Left) -->
+                    <div 
+                    class="absolute top-10 left-5 flex flex-col items-end text-right max-w-[180px]
+                            opacity-0 -translate-x-10 transition-all duration-700 ease-out"
+                    data-animate="left"
+                    >
+                    <h4 class="font-bold text-yellow-600 text-6xl">B<sub>5</sub></h4>
+                    <p class="text-gray-600 text-xl">0.11 mg (2% DV)<br/>Pantothenic acid</p>
+                    </div>
+
+                    <!-- Vitamin B9 (Middle Left) -->
+                    <div
+                    class="absolute top-1/2 left-0 -translate-y-1/2 flex flex-col items-end text-right max-w-[180px]
+                            opacity-0 -translate-x-10 transition-all duration-700 ease-out delay-[400ms]"
+                    data-animate="left"
+                    >
+                        <h4 class="font-bold text-yellow-600 text-6xl">B<sub>9</sub></h4>
+                        <p class="text-gray-600 text-xl">7 µg (2% DV)<br/>Folate</p>
+                    </div>
+
+                    <!-- Vitamin B1 (Lower Left) -->
+                    <div class="absolute bottom-10 left-5 flex flex-col items-end text-right max-w-[180px]
+                    opacity-0 -translate-x-10 transition-all duration-700 ease-out delay-[600ms]"
+                    data-animate="left">
+                        <h4 class="font-bold text-yellow-600 text-6xl">B<sub>1</sub></h4>
+                        <p class="text-gray-600 text-xl">0.001 mg (0% DV)<br/>Thiamin</p>
+                    </div>
+
+
+
+                    <div class="absolute top-10 right-5 flex flex-col items-start text-left max-w-[180px]
+                            opacity-0 translate-x-10 transition-all duration-700 ease-out"
+                    data-animate="right"
+                    >
+                        <h4 class="font-bold text-brown-600 text-6xl">Mn</h4>
+                        <p class="text-gray-600 text-xl">0.47 mg (20% DV)<br/>Manganese</p>
+                    </div>
+
+
+                    <!-- Cu (Middle Right) -->
+                    <div class="absolute top-1/2 right-2 -translate-y-1/2 flex flex-col items-start text-left max-w-[180px]
+                    opacity-0 translate-x-10 transition-all duration-700 ease-out delay-[400ms]"
+                    data-animate="right">
+                        <h4 class="font-bold text-brown-600 text-6xl">Cu</h4>
+                        <p class="text-gray-600 text-xl">0.04 mg (4% DV)<br/>Copper</p>
+                    </div>
+
+                    <!-- Ca (Lower Right) -->
+                    <div class="absolute bottom-10 right-12 flex flex-col items-start text-left max-w-[180px]
+                    opacity-0 translate-x-10 transition-all duration-700 ease-out delay-[600ms]"
+                    data-animate="right">
+                        <h4 class="font-bold text-brown-600 text-6xl">Ca</h4>
+                        <p class="text-gray-600 text-xl">40 mg (3% DV)<br/>Calcium</p>
+                    </div>
+
+                  
+                    </div>
+                </div>
+                </div>
+
+                <!-- Bottom Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-6 mt-12 text-center">
+                <div
+                class="opacity-0 translate-y-10 transition-all duration-700 ease-out "
+                data-animate="up"
+                >
+                <h4 class="font-bold text-orange-600 text-6xl">Water</h4>
+                <p class="text-gray-700 text-xl">0.14 g</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Protein</h4>
+                    <p class="text-gray-700 text-xl">0.3 g (1% DV)</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Carbs</h4>
+                    <p class="text-gray-700 text-xl">88.2 g (29% DV)</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[800ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Fats</h4>
+                    <p class="text-gray-700 text-xl">0.1 g (0% DV)</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Fiber</h4>
+                    <p class="text-gray-700 text-xl">3.4 g (14% DV)</p>
+                </div>
+                </div>
+
+                <!-- Footer Note -->
+                <p class="mt-6 text-sm text-gray-500 text-center max-w-2xl mx-auto opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                data-animate="up">
+                Less than 2% DV minerals: Magnesium, Zinc, Phosphorus & Potassium. <br>
+                Sources: USDA National Nutrient Database. Average Daily Values reference: NHI Dietary Supplement Label Data Base.
+                </p>
+            </div>
+            </section>
+
+        <!-- HIGHLIGHT CARDS -->
+        <section class="mt-20 bg-beige px-4 sm:px-8 lg:px-20" style="background-color: #d2bfa3;">
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-52 min-h-[60vh]">
+                <!-- Left: Icon cards -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-8 lg:gap-12">
+                    <!-- Card 1 -->
+                    <div class="flex flex-col items-center text-center w-60 opacity-0 translate-y-10 transition-all duration-700 ease-out"
+                        data-animate="up">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                            <img src="../static/pictures/icon1.png" alt="Digestive Health" class="w-10 h-10 sm:w-12 sm:h-12" />
+                        </div>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">Supports Digestive Health</h3>
+                        <p class="text-gray-600 text-sm">Arrowroot is gentle on the stomach and aids in digestion, making it beneficial for individuals with sensitive digestive systems or recovering from illness.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="flex flex-col items-center text-center w-60 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                        data-animate="up">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                            <img src="../static/pictures/icon2.png" alt="Gluten Free" class="w-10 h-10 sm:w-12 sm:h-12" />
+                        </div>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">Gluten-Free Alternative</h3>
+                        <p class="text-gray-600 text-sm">As a naturally gluten-free starch, arrowroot serves as a safe and versatile thickening agent for people with celiac disease or gluten intolerance.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="flex flex-col items-center text-center w-60 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms]"
+                        data-animate="up">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                            <img src="../static/pictures/icon3.png" alt="Nutrient Efficient" class="w-10 h-10 sm:w-12 sm:h-12" />
+                        </div>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">Nutrient-Rich</h3>
+                        <p class="text-gray-600 text-sm">Arrowroot contains essential nutrients such as potassium, iron, and B vitamins, which contribute to healthy energy levels, improved circulation, and overall well-being.</p>
+                    </div>
+                </div>
+                <!-- Right: Arrowroot image -->
+                <div class="overflow-hidden max-w-[500px] flex items-center justify-center opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                 data-animate="up">
+                    <img
+                        src="../static/pictures/ArrowRoot.png"
+                        alt="Arrowroot"
+                        class="w-[500px] h-[500px] object-contain opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                        data-animate="up"
+                        style="min-width:500px; min-height:500px;"
+                    />
+                </div>
+            </div>
+        </section>
+        
+        <!-- PRODUCTS -->
+        <section class="mt-20 pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-semibold text-gn-800">Our Favorite Plants</h2>
+                    <nav class="hidden sm:flex gap-3 text-sm text-gray-500">
+                        <a href="#" class="hover:text-gray-700">All plants</a>
+                        <a href="#" class="hover:text-gray-700">New Arrivals</a>
+                        <a href="#" class="hover:text-gray-700">Sale</a>
+                        <a href="#" class="hover:text-gray-700">Easy Care</a>
+                    </nav>
+                </div>
+
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Product card repeated 8 items -->
+                    <template id="productTemplate">
+                        <div class="bg-white rounded-2xl p-4 shadow-soft reveal">
+                            <div class="rounded-xl overflow-hidden h-44">
+                                <img src="" class="w-full h-full object-cover" alt="plant"/>
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="font-semibold text-gray-800">Plant Name</h4>
+                                <p class="text-sm text-gray-500 mt-1">$24.00</p>
+                                <div class="mt-4 flex items-center justify-between">
+                                    <a class="inline-flex items-center px-3 py-2 rounded-full border border-gray-200 text-sm hover:bg-gray-50" href="#">View</a>
+                                    <button class="inline-flex items-center px-3 py-2 rounded-full bg-gn-800 text-white text-sm">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-50 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="md:flex md:items-start md:justify-between">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-gn-300 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-gn-800" viewBox="0 0 24 24" fill="none"><path d="M4 20c0-6 8-12 16-12" stroke="currentColor" stroke-width="1.5"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gn-800">GreenNest</p>
+                            <p class="text-sm text-gray-500 mt-1">Plants, pots & care — delivered with love.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 md:mt-0 grid grid-cols-2 gap-6 sm:grid-cols-4">
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Shop</h5>
+                        <ul class="mt-3 text-sm text-gray-500 space-y-2">
+                            <li><a href="#">All Plants</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Pots & Tools</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Company</h5>
+                        <ul class="mt-3 text-sm text-gray-500 space-y-2">
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Help</h5>
+                        <ul class="mt-3 text-sm text-gray-500 space-y-2">
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Follow</h5>
+                        <div class="mt-3 flex gap-3">
+                            <a class="p-2 rounded-lg bg-white shadow-soft" href="#" aria-label="facebook">FB</a>
+                            <a class="p-2 rounded-lg bg-white shadow-soft" href="#" aria-label="instagram">IG</a>
+                            <a class="p-2 rounded-lg bg-white shadow-soft" href="#" aria-label="twitter">TW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 text-sm text-gray-500 text-center border-t border-gray-100 pt-6">
+                © GreenNest — 2025. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Minimal JS: mobile menu toggle, product fills, reveal on scroll -->
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Populate product grid with placeholders
+        const productContainer = document.querySelector('section.mt-20.pb-20 .grid.grid-cols-1.sm\\:grid-cols-2');
+        const template = document.getElementById('productTemplate').content;
+        const images = [
+            'https://source.unsplash.com/400x400/?monstera',
+            'https://source.unsplash.com/400x400/?pothos',
+            'https://source.unsplash.com/400x400/?succulent',
+            'https://source.unsplash.com/400x400/?ficus',
+            'https://source.unsplash.com/400x400/?calathea',
+            'https://source.unsplash.com/400x400/?philodendron',
+            'https://source.unsplash.com/400x400/?snake-plant',
+            'https://source.unsplash.com/400x400/?alocasia'
+        ];
+        const gridParent = document.querySelector('section.mt-20.pb-20 .max-w-7xl .grid.grid-cols-1.sm\\:grid-cols-2.md\\:grid-cols-3.lg\\:grid-cols-4');
+        if (gridParent) {
+            images.forEach((src, i) => {
+                const node = document.importNode(template, true);
+                node.querySelector('img').src = src;
+                node.querySelector('h4').textContent = ['Monstera Deliciosa','Devil\'s Ivy','Echeveria','Ficus Lyrata','Calathea Orbifolia','Philodendron','Snake Plant','Alocasia'][i];
+                node.querySelector('p').textContent = ['$' + (18 + i*4).toFixed(2)];
+                gridParent.appendChild(node);
+            });
+        }
+
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('show');
+            });
+        }, {threshold: 0.12});
+        reveals.forEach(r => io.observe(r));
+    </script>
+</body>
+</html>

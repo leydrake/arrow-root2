@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Rooted Knowledge{% endblock %}
+
+{% block content %}
+
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                const elements = document.querySelectorAll("[data-animate]");
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                    const el = entry.target;
+                    const direction = el.dataset.animate; // "left", "right", "up", "down"
+                    let hiddenClass = "";
+                    if (direction === "left")  hiddenClass = "-translate-x-10";
+                    if (direction === "right") hiddenClass = "translate-x-10";
+                    if (direction === "up")    hiddenClass = "translate-y-10";
+                    if (direction === "down")  hiddenClass = "-translate-y-10";
+
+                    if (entry.isIntersecting) {
+                        // fade + move
+                        el.classList.add("opacity-100");
+                        if (direction === "left" || direction === "right") el.classList.add("translate-x-0");
+                        if (direction === "up"   || direction === "down")  el.classList.add("translate-y-0");
+                        el.classList.remove("opacity-0", hiddenClass);
+
+                        // scale
+                        if (el.dataset.scale !== undefined) {
+                        el.classList.add("scale-100");
+                        el.classList.remove("scale-50");
+                        }
+                    } else {
+                        // reverse
+                        el.classList.add("opacity-0", hiddenClass);
+                        el.classList.remove("opacity-100", "translate-x-0", "translate-y-0");
+                        if (el.dataset.scale !== undefined) {
+                        el.classList.add("scale-0");
+                        el.classList.remove("scale-100");
+                        }
+                    }
+                    });
+                }, { threshold: 0.4 });
+
+                elements.forEach((el) => observer.observe(el));
+                });
+            </script>
+
+
+<div class="min-h-screen flex items-center justify-center
+            bg-cover bg-center bg-no-repeat "
+     style="background-image: url('../static/pictures/pic4.jpg'); ">
+     <!-- Back to home button  -->
+    <a href="{% url 'home' %}" class="absolute top-6 left-6 flex items-center gap-2 text-white hover:text-gray-200 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        <span class="text-sm">Home page</span>
+    </a>
+
+    <div class="max-w-md w-full mx-4">
+        <!-- Logo  -->
+        <div class="text-center mb-8 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[500ms]"
+                data-animate="up" >
+            <div class="inline-flex items-center justify-center ">
+                <image src="../static/pictures/main logo.png" class="w-[140px] h-[140px] text-blue-600"/>
+            </div>
+        </div>
+
+         <!-- Register Form  -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 opacity-0 translate-y-10 transition-all duration-500 ease-out "
+                data-animate="up">
+            <div class="text-center mb-8">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Create Account</h1>
+                <p class="text-gray-600 text-sm">Join us today! Enter your details</p>
+            </div>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                 <!-- Name Fields  -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input 
+                            type="text" 
+                            id="first_name" 
+                            name="first_name" 
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                            placeholder="First name"
+                        >
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input 
+                            type="text" 
+                            id="last_name" 
+                            name="last_name" 
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                            placeholder="Last name"
+                        >
+                    </div>
+                </div>
+
+                 <!-- Username Field  -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                        placeholder="Choose a username"
+                    >
+                </div>
+
+                 <!-- Email Field  -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                        placeholder="Enter your email"
+                    >
+                </div>
+
+                 <!-- Password Fields  -->
+                <div>
+                    <label for="password1" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input 
+                        type="password" 
+                        id="password1" 
+                        name="password1" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                        placeholder="Create a password"
+                    >
+                </div>
+
+                <div>
+                    <label for="password2" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                    <input 
+                        type="password" 
+                        id="password2" 
+                        name="password2" 
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                        placeholder="Confirm your password"
+                    >
+                </div>
+
+                 <!-- Sign Up Button  -->
+                <button 
+                    type="submit"
+                    class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 focus:ring-4 focus:ring-green-200 transition-all duration-200 transform hover:scale-[1.02]"
+                >
+                    Create Account
+                </button>
+
+                 <!-- Sign In Link  -->
+                <div class="text-center">
+                    <span class="text-gray-600 text-sm">Already have an account? </span>
+                    <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-800 font-medium text-sm">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
