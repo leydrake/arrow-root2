@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Rooted Knowledge{% endblock %}
+
+{% block content %}
+<style>
+.feature-cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  perspective: 1000px;
+}
+
+.feature-card {
+  width: 280px;
+  flex-shrink: 0;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+  position: relative;
+  z-index: 1;
+}
+
+.feature-cards-container:hover .feature-card:not(:hover) {
+  transform: scale(0.85) translateY(20px);
+  opacity: 0.7;
+  filter: blur(2px);
+}
+
+.feature-card:hover {
+  transform: scale(1.15) translateY(-30px) !important;
+  z-index: 10 !important;
+  opacity: 1 !important;
+  filter: blur(0) !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4) !important;
+}
+
+@media (max-width: 768px) {
+  .feature-cards-container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .feature-card {
+    width: 100%;
+    max-width: 350px;
+  }
+  
+  .feature-cards-container:hover .feature-card:not(:hover) {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  
+  .feature-card:hover {
+    transform: scale(1.05) !important;
+  }
+}
+
+/* Quick Access Cards Hover Effects */
+.quick-access-container {
+  perspective: 1000px;
+}
+
+.quick-access-card {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+}
+
+.quick-access-container:hover .quick-access-card:not(:hover) {
+  transform: scale(0.95) translateY(10px);
+  opacity: 0.8;
+  filter: blur(1px);
+}
+
+.quick-access-card:hover {
+  transform: scale(1.08) translateY(-15px) !important;
+  opacity: 1 !important;
+  filter: blur(0) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+  border-color: #16a34a !important;
+}
+
+@media (max-width: 1024px) {
+  .quick-access-container:hover .quick-access-card:not(:hover) {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  .quick-access-card:hover {
+    transform: scale(1.03) translateY(-5px) !important;
+  }
+}
+
+/* Process Cards Hover Effects */
+.process-container {
+  perspective: 1000px;
+}
+
+.process-card {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+  cursor: pointer;
+}
+
+.process-container:hover .process-card:not(:hover) {
+  transform: scale(0.95) translateY(10px);
+  opacity: 0.8;
+  filter: blur(1px);
+}
+
+.process-card:hover {
+  transform: scale(1.08) translateY(-15px) !important;
+  opacity: 1 !important;
+  filter: blur(0) !important;
+  z-index: 10 !important;
+}
+
+.process-card:hover .process-icon-container {
+  background-color: #15803d !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 15px 30px rgba(34, 197, 94, 0.3) !important;
+}
+
+.process-card:hover .process-number {
+  color: #22c55e !important;
+  transform: scale(1.1) !important;
+}
+
+.process-card:hover .process-title {
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
+.process-card:hover .process-description {
+  color: #e5e7eb !important;
+}
+
+@media (max-width: 1024px) {
+  .process-container:hover .process-card:not(:hover) {
+    transform: scale(0.98);
+    opacity: 0.9;
+  }
+  
+  .process-card:hover {
+    transform: scale(1.03) translateY(-5px) !important;
+  }
+}
+</style>
+
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section with Background -->
+  <div class="relative h-screen bg-cover bg-center bg-no-repeat" style="background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/static/pictures/pic1.jpg');">
+    <!-- Navbar -->
+    <nav class="relative z-10 bg-transparent">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+          <a href="{% url 'home' %}" class="flex items-center gap-3">
+            <img src="/static/pictures/main logo.png" alt="logo" class="w-8 h-8 object-contain" />
+            <span class="text-lg font-semibold text-white">Rooted Knowledge</span>
+          </a>
+
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="#" class="text-white hover:text-green-300 transition">Districts</a>
+            <a href="#" class="text-white hover:text-green-300 transition">About Us</a>
+            <a href="#" class="text-white hover:text-green-300 transition">Services</a>
+            <a href="#" class="text-white hover:text-green-300 transition">Projects</a>
+            <a href="#" class="text-white hover:text-green-300 transition">All Pages</a>
+            <div class="flex items-center gap-2">
+              <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+              <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4">
+            <a href="{% url 'account_profile' %}" class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white font-medium">
+                {{ user.first_name.0 }}{{ user.last_name.0 }}
+              </div>
+              <span class="text-white font-medium hidden md:block">{{ user.get_full_name }}</span>
+            </a>
+            <a href="{% url 'logout' %}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">Let's Talk</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 flex items-center justify-center h-full">
+      <div class="text-center text-white max-w-4xl mx-auto px-4">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">We take care of your<br><span class="text-green-400">garden & tree</span></h1>
+        <p class="text-xl mb-8 text-gray-200">Garden Tree has developed into a leading company dedicated<br>to providing intensive solutions for gardening.</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button class="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-lg font-medium transition">Get In Touch</button>
+          <button class="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-lg font-medium transition">Who We Are</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Cards Overlay -->
+    <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-full max-w-7xl px-4">
+      <div class="flex justify-center gap-4 feature-cards-container">
+        <!-- Planting Card -->
+        <a href="{% url 'planting' %}" class="feature-card group relative overflow-hidden rounded-xl bg-white/90 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:z-10">
+          <img src="/static/pictures/pic2.jpg" alt="Planting" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <div class="bg-white/20 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Planting Value</h3>
+          </div>
+        </a>
+
+        <!-- Cultural Card -->
+        <a href="{% url 'cultural' %}" class="feature-card group relative overflow-hidden rounded-xl bg-white/90 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:z-10">
+          <img src="/static/pictures/pic3.jpg" alt="Cultural" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <div class="bg-white/20 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Cultural Value</h3>
+          </div>
+        </a>
+
+        <!-- Historical Card -->
+        <a href="{% url 'historical' %}" class="feature-card group relative overflow-hidden rounded-xl bg-white/90 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:z-10">
+          <img src="/static/pictures/pic4.jpg" alt="Historical" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <div class="bg-white/20 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012-2v-1a2 2 0 012-2h1.945M11 6.5V4.5a1 1 0 00-1-1h-1.5a1 1 0 00-1 1V6.5"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Historical Value</h3>
+          </div>
+        </a>
+
+        <!-- Economic Card -->
+        <a href="{% url 'economic' %}" class="feature-card group relative overflow-hidden rounded-xl bg-white/90 backdrop-blur-sm shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-110 hover:z-10">
+          <img src="/static/pictures/pic5.jpg" alt="Economic" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+            <div class="bg-white/20 backdrop-blur-sm rounded-full w-12 h-12 flex items-center justify-center mb-3">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold">Economic Value</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900 mb-6">Welcome To Garden<br>Tree, We Cultivate More<br>Than Just Plants</h2>
+          <p class="text-gray-600 mb-6">Established with a passion for nature and a commitment to sustainable living, Garden Tree has blossomed into a leading company dedicated to providing innovative solutions for gardening, landscaping, and environmental stewardship.</p>
+          <a href="#" class="inline-flex items-center text-green-600 font-medium hover:text-green-700 transition">
+            About Us →
+          </a>
+        </div>
+        <div class="relative">
+          <img src="/static/pictures/pic5.jpg" alt="Garden" class="rounded-2xl shadow-2xl w-full h-96 object-cover" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Section -->
+  <div class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-4xl font-bold text-green-600 mb-2">29</div>
+          <div class="text-gray-600">Partner Companies</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold text-green-600 mb-2">874</div>
+          <div class="text-gray-600">Total Employees</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold text-green-600 mb-2">169k</div>
+          <div class="text-gray-600">Clients</div>
+        </div>
+        <div>
+          <div class="text-4xl font-bold text-green-600 mb-2">265</div>
+          <div class="text-gray-600">Employee Growth</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Process Section -->
+  <div class="bg-green-900 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center mb-16">
+        <div>
+          <h2 class="text-4xl font-bold text-white mb-4">Meticulous And<br>Sustainable Process</h2>
+        </div>
+        <button class="border-2 border-green-400 text-green-400 hover:bg-green-400 hover:text-green-900 px-6 py-2 rounded-lg font-medium transition">
+          Our Process
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 process-container">
+        <!-- Process Step 1 -->
+        <div class="process-card text-center">
+          <div class="process-icon-container bg-green-800 rounded-2xl p-8 mb-4 transition-all duration-300">
+            <img src="/static/pictures/plant1.png" alt="Discovery" class="w-16 h-16 mx-auto mb-4 transition-transform duration-300" />
+          </div>
+          <div class="process-number text-green-400 font-bold mb-2 transition-all duration-300">01</div>
+          <h4 class="process-title text-white font-semibold mb-2 transition-all duration-300">Discovery and Consultation</h4>
+          <p class="process-description text-gray-300 text-sm transition-colors duration-300">Our experts understand your unique site, climate and investment goals to develop the best vision.</p>
+        </div>
+
+        <!-- Process Step 2 -->
+        <div class="process-card text-center">
+          <div class="process-icon-container bg-green-800 rounded-2xl p-8 mb-4 transition-all duration-300">
+            <img src="/static/pictures/plant2.png" alt="Integration" class="w-16 h-16 mx-auto mb-4 transition-transform duration-300" />
+          </div>
+          <div class="process-number text-green-400 font-bold mb-2 transition-all duration-300">02</div>
+          <h4 class="process-title text-white font-semibold mb-2 transition-all duration-300">Native Plant Integration</h4>
+          <p class="process-description text-gray-300 text-sm transition-colors duration-300">Garden Tree Landscape is designed to enhance your living environment and inspire the soul.</p>
+        </div>
+
+        <!-- Process Step 3 -->
+        <div class="process-card text-center">
+          <div class="process-icon-container bg-green-800 rounded-2xl p-8 mb-4 transition-all duration-300">
+            <img src="/static/pictures/plant3.png" alt="Irrigation" class="w-16 h-16 mx-auto mb-4 transition-transform duration-300" />
+          </div>
+          <div class="process-number text-green-400 font-bold mb-2 transition-all duration-300">03</div>
+          <h4 class="process-title text-white font-semibold mb-2 transition-all duration-300">Water-Efficient Irrigation</h4>
+          <p class="process-description text-gray-300 text-sm transition-colors duration-300">Smart Tree Landscape is designed to conserve water and reduce environmental impact.</p>
+        </div>
+
+        <!-- Process Step 4 -->
+        <div class="process-card text-center">
+          <div class="process-icon-container bg-green-800 rounded-2xl p-8 mb-4 transition-all duration-300">
+            <img src="/static/pictures/plant4.png" alt="Support" class="w-16 h-16 mx-auto mb-4 transition-transform duration-300" />
+          </div>
+          <div class="process-number text-green-400 font-bold mb-2 transition-all duration-300">04</div>
+          <h4 class="process-title text-white font-semibold mb-2 transition-all duration-300">Quality Control & Support</h4>
+          <p class="process-description text-gray-300 text-sm transition-colors duration-300">Garden Tree Landscape doesn't end with installation - we provide ongoing care.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Access Cards -->
+  <div class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Explore Plant Values</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 quick-access-container">
+        <!-- Planting -->
+        <a href="{% url 'planting' %}" class="quick-access-card group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 transform bg-white border border-gray-200">
+          <img src="/static/pictures/pic2.jpg" alt="Planting" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="p-5 relative z-10">
+            <h3 class="text-xl font-semibold text-green-800 group-hover:text-green-600 transition-colors">Planting Value</h3>
+            <p class="text-gray-600 text-sm mt-2 group-hover:text-gray-700 transition-colors">Learn about sustainable planting and cultivation practices.</p>
+          </div>
+        </a>
+
+        <!-- Cultural -->
+        <a href="{% url 'cultural' %}" class="quick-access-card group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 transform bg-white border border-gray-200">
+          <img src="/static/pictures/pic3.jpg" alt="Cultural" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="p-5 relative z-10">
+            <h3 class="text-xl font-semibold text-green-800 group-hover:text-green-600 transition-colors">Cultural Value</h3>
+            <p class="text-gray-600 text-sm mt-2 group-hover:text-gray-700 transition-colors">Discover how plants play a role in traditions and culture.</p>
+          </div>
+        </a>
+
+        <!-- Historical -->
+        <a href="{% url 'historical' %}" class="quick-access-card group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 transform bg-white border border-gray-200">
+          <img src="/static/pictures/pic4.jpg" alt="Historical" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="p-5 relative z-10">
+            <h3 class="text-xl font-semibold text-green-800 group-hover:text-green-600 transition-colors">Historical Value</h3>
+            <p class="text-gray-600 text-sm mt-2 group-hover:text-gray-700 transition-colors">Understand the history and legacy of native plants.</p>
+          </div>
+        </a>
+
+        <!-- Economic -->
+        <a href="{% url 'economic' %}" class="quick-access-card group relative overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-all duration-500 transform bg-white border border-gray-200">
+          <img src="/static/pictures/pic5.jpg" alt="Economic" class="h-48 w-full object-cover group-hover:scale-105 transition duration-500" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div class="p-5 relative z-10">
+            <h3 class="text-xl font-semibold text-green-800 group-hover:text-green-600 transition-colors">Economic Value</h3>
+            <p class="text-gray-600 text-sm mt-2 group-hover:text-gray-700 transition-colors">Explore how plants contribute to local and global economies.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -10,24 +10,69 @@ from django.db.models import Count, Q
 from datetime import datetime, timedelta
 import os
 from .models import AdminProfile, Visit, Download, AnalyticsSummary
+from django.contrib.auth import get_user_model
+from django.db.models import Q as ORM_Q
+from django.contrib.auth.forms import UserCreationForm
+
+User = get_user_model()
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        if username and password:
-            user = authenticate(request, username=username, password=password)
+        identifier = (request.POST.get('email') or request.POST.get('username') or '').strip()
+        password = (request.POST.get('password') or '').strip()
+
+        if identifier and password:
+            # Allow login by email or username
+            user_obj = None
+            try:
+                # Prefer email if identifier looks like an email
+                if '@' in identifier:
+                    user_obj = User.objects.filter(email__iexact=identifier).first()
+                if user_obj is None:
+                    user_obj = User.objects.filter(username__iexact=identifier).first()
+            except Exception:
+                user_obj = None
+
+            username_for_auth = user_obj.username if user_obj else identifier
+
+            user = authenticate(request, username=username_for_auth, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Welcome back, {user.username}!')
-                return redirect('dashboard')
+                # Role-based redirect
+                if user.is_staff or user.is_superuser:
+                    return redirect('dashboard')
+                return redirect('account_profile')
             else:
-                messages.error(request, 'Invalid username or password.')
+                messages.error(request, 'Invalid email/username or password.')
         else:
             messages.error(request, 'Please fill in all fields.')
-    
+
     return render(request, "login.html")
+
+def register_view(request):
+    if request.method == 'POST':
+        # Build a UserCreationForm with the required username/password fields
+        form = UserCreationForm(request.POST)
+        # Validate both the Django form and custom fields we expect from the Arrowroot template
+        required_custom_fields = ['first_name', 'last_name', 'email']
+        missing = [f for f in required_custom_fields if not request.POST.get(f)]
+        if form.is_valid() and not missing:
+            user = form.save(commit=False)
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.save()
+            messages.success(request, 'Account created successfully. Please log in.')
+            return redirect('login')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+            for f in missing:
+                messages.error(request, f"{f}: This field is required")
+    else:
+        form = UserCreationForm()
+    return render(request, "register.html", {"form": form})
 
 @login_required
 def dashboard(request):
@@ -41,7 +86,10 @@ def dashboard(request):
         'user': request.user,
         'is_admin': is_admin,
     }
-    return render(request, "dashboard.html", context)
+    # Only admins/staff should see dashboard; others go to account profile
+    if not (request.user.is_staff or request.user.is_superuser or is_admin):
+        return redirect('account_profile')
+    return render(request, "admin/dashboard.html", context)
 
 def logout_view(request):
     logout(request)
@@ -49,13 +97,42 @@ def logout_view(request):
     return redirect('login')
 
 def home(request):
-    if request.user.is_authenticated:
-        return redirect('dashboard')
-    return redirect('login')
+    # Always show marketing/landing home page at root
+    return render(request, "home.html")
 
+@login_required
+def account_profile(request):
+    return render(request, "accountprofile.html", {"user": request.user})
+
+@login_required
+def planting_view(request):
+    return render(request, "planting.html")
+
+@login_required
+def cultural_view(request):
+    return render(request, "cultural.html")
+
+@login_required
+def historical_view(request):
+    return render(request, "historical.html")
+
+@login_required
+def economic_view(request):
+    return render(request, "economic.html")
+
+@login_required
 def track_download(request, file_name):
     """Track file downloads and serve the file"""
     try:
+        # Admin/staff only
+        try:
+            admin_profile = AdminProfile.objects.get(user=request.user)
+            is_admin = admin_profile.is_admin
+        except AdminProfile.DoesNotExist:
+            is_admin = False
+        if not (request.user.is_staff or request.user.is_superuser or is_admin):
+            messages.error(request, 'Access denied. Admin privileges required.')
+            return redirect('account_profile')
         # Get client IP
         x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
         if x_forwarded_for:
@@ -101,9 +178,9 @@ def analytics_dashboard(request):
     except AdminProfile.DoesNotExist:
         is_admin = False
     
-    if not is_admin:
+    if not (request.user.is_staff or request.user.is_superuser or is_admin):
         messages.error(request, 'Access denied. Admin privileges required.')
-        return redirect('dashboard')
+        return redirect('account_profile')
     
     # Get date range (last 30 days)
     end_date = timezone.now().date()

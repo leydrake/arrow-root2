@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rooted Knowledge{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gn: {
+                            900: '#123018',
+                            800: '#2E7D32',
+                            600: '#4CAF50',
+                            300: '#A5D6A7',
+                            100: '#E8F5E9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+    {% block content %}
+    {% endblock %}
+    
+     <!-- Messages  -->
+    {% if messages %}
+        <div class="fixed top-4 right-4 z-50 space-y-2">
+            {% for message in messages %}
+                <div class="px-4 py-3 rounded-lg shadow-lg {% if message.tags == 'error' %}bg-red-500 text-white{% elif message.tags == 'success' %}bg-green-500 text-white{% else %}bg-blue-500 text-white{% endif %} max-w-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+        <script>
+            setTimeout(() => {
+                document.querySelectorAll('[class*="bg-red-500"], [class*="bg-green-500"], [class*="bg-blue-500"]').forEach(el => {
+                    el.style.opacity = '0';
+                    el.style.transition = 'opacity 0.5s';
+                    setTimeout(() => el.remove(), 500);
+                });
+            }, 3000);
+        </script>
+    {% endif %}
+</body>
+</html>

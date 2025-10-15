@@ -1,0 +1,820 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>GreenNest — Indoor Plants Shop</title>
+
+    <!-- Tailwind CDN (Play/Standalone) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind config for extra utilities -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gn: {
+                            900: '#123018',
+                            800: '#2E7D32',
+                            600: '#4CAF50',
+                            300: '#A5D6A7',
+                            100: '#E8F5E9'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 6px 18px rgba(15, 23, 42, 0.08)'
+                    }
+                }
+            },
+            plugins: []
+        }
+    </script>
+
+    <style>
+        /* small custom for subtle gradient and image masks */
+        .hero-mask {
+            background: linear-gradient(180deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.85) 70%);
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        .reveal.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        body{
+                font-family: 'Helvetica', sans-serif;
+        }
+        
+        
+    </style>
+</head>
+<body class="font-poppins text-gray-800 antialiased bg-white">
+
+    <!-- NAV -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-4">
+                    <a href="#" class="flex items-center gap-3">
+                        <img src="../static/pictures/main logo.png" alt="logo" class="w-11 h-11 object-contain"/>
+                        <span class="text-lg font-semibold" style="color: #0A3005;">Rooted Knowledge</span>
+                    </a>
+                </div>
+
+                <!-- desktop links -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <a href="#" class="text-sm hover:text-gn-800">Home</a>
+                    <a href="#" class="text-sm hover:text-gn-800">Shop</a>
+                    <a href="#" class="text-sm hover:text-gn-800">Plant Care</a>
+                    <a href="#" class="text-sm hover:text-gn-800">About</a>
+                    <a href="#" class="text-sm hover:text-gn-800">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button aria-label="search" class="hidden sm:inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                        </svg>
+                    </button>
+
+                    <button aria-label="cart" class="hidden sm:inline-flex items-center p-2 rounded-md hover:bg-gray-100">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 7M7 13l-2 7h12l-2-7M16 21a1 1 0 11-2 0 1 1 0 012 0zM8 21a1 1 0 11-2 0 1 1 0 012 0z"/>
+                        </svg>
+                    </button>
+
+                 <a href="/login/" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gn-800 text-white text-sm shadow hover:scale-105 transform transition">Log In</a>
+
+
+                    <!-- mobile hamburger -->
+                    <button id="menuBtn" class="md:hidden p-2 rounded-md ml-1" aria-label="Open menu">
+                        <svg class="w-6 h-6 text-gray-800" viewBox="0 0 24 24" fill="none">
+                            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- mobile menu -->
+        <div id="mobileMenu" class="md:hidden border-t border-gray-100 hidden">
+            <div class="px-4 py-4 space-y-2">
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Home</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Shop</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Plant Care</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">About</a>
+                <a href="#" class="block rounded-md px-3 py-2 hover:bg-gray-100">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+
+        <section class="relative" style="background-image: url(../static/pictures/pic3.jpg); background-size: cover; background-position: center;">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center min-h-screen">
+                    <div class="py-10 lg:py-20">
+                        <div class="w-24 h-24 mb-6 rounded-xl bg-cover bg-center"></div>
+                        <p class="text-xl text-white font-bold opacity-0 translate-y-10 transition-all duration-700 ease-out "
+                         data-animate="up">Breathe life into your space</p>
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-white leading-tight opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[200ms]"
+                         data-animate="up">Discover the benefits of arrowroot for everyday living</h1>
+                        <p class="mt-6 text-white max-w-xl opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                         data-animate="up">Explore arrowroot’s uses in food, health, and farming — simple guides and resources to help you learn and grow.</p>
+
+                        <div class="mt-8 flex flex-wrap gap-3 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms] "
+                            data-animate="up">
+                            <a href="/login/" class="inline-flex items-center px-12 py-3 rounded-full bg-gn-800 text-white font-medium shadow hover:scale-[1.02] transform transition">Learn More</a>
+
+                        </div>
+
+                        <!-- stat cards -->
+                        <!-- <div class="mt-28 grid grid-cols-2 sm:grid-cols-4 gap-4 w-[1300px] h-[110px]">
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">1,900+</div>
+                                <div class="text-xs text-gray-500 mt-1">Happy Plant Lovers</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">8,000+</div>
+                                <div class="text-xs text-gray-500 mt-1">Unique Green Beauties</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">520+</div>
+                                <div class="text-xs text-gray-500 mt-1">Local Greenhouses</div>
+                            </div>
+                            <div class="bg-white rounded-xl p-7 shadow-soft text-center">
+                                <div class="text-2xl font-bold text-gn-800">4.9★</div>
+                                <div class="text-xs text-gray-500 mt-1">Rated by Customers</div>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <!-- hero image -->
+                    <div class="relative">
+                        <div class="rounded-2xl overflow-hidden shadow-lg">
+        
+                        </div>
+
+           
+                    </div>
+                </div>
+            </div>
+
+     </section>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                const elements = document.querySelectorAll("[data-animate]");
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                    const el = entry.target;
+                    const direction = el.dataset.animate; // "left", "right", "up", "down"
+                    let hiddenClass = "";
+                    if (direction === "left")  hiddenClass = "-translate-x-10";
+                    if (direction === "right") hiddenClass = "translate-x-10";
+                    if (direction === "up")    hiddenClass = "translate-y-10";
+                    if (direction === "down")  hiddenClass = "-translate-y-10";
+
+                    if (entry.isIntersecting) {
+                        // fade + move
+                        el.classList.add("opacity-100");
+                        if (direction === "left" || direction === "right") el.classList.add("translate-x-0");
+                        if (direction === "up"   || direction === "down")  el.classList.add("translate-y-0");
+                        el.classList.remove("opacity-0", hiddenClass);
+
+                        // scale
+                        if (el.dataset.scale !== undefined) {
+                        el.classList.add("scale-100");
+                        el.classList.remove("scale-50");
+                        }
+                    } else {
+                        // reverse
+                        el.classList.add("opacity-0", hiddenClass);
+                        el.classList.remove("opacity-100", "translate-x-0", "translate-y-0");
+                        if (el.dataset.scale !== undefined) {
+                        el.classList.add("scale-0");
+                        el.classList.remove("scale-100");
+                        }
+                    }
+                    });
+                }, { threshold: 0.4 });
+
+                elements.forEach((el) => observer.observe(el));
+                });
+            </script>
+
+
+
+
+            
+
+            <!-- subtle bottom gradient -->
+            <div class="h-20 hero-mask"></div>
+        </section>
+
+        
+            <!-- ARROWROOT NUTRITION -->
+            <section class="mt-38 ">
+            <div class="max-w-7xl mx-auto px-4 sm:px-16 lg:px-18 ">
+                <h2 class="text-3xl font-bold text-center text-green-700 opacity-0 translate-y-10 transition-all duration-700 ease-out"
+                     data-animate="up" >Arrowroot Nutrition</h2>
+
+                <!-- Center Wrapper -->
+                <div class="relative flex justify-center items-center mt-12">
+
+                <!-- Center Circle with Image -->
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]
+                    scale-0 transition-transform duration-500 ease-out"
+                    data-animate="up" data-scale>
+                    <img src="../static/pictures/pic8.jpg" alt="Arrowroot" class="object-contain w-[500px] h-[500px]" />
+                </div>
+
+
+                <!-- Circular Labels -->
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-full h-full relative">
+
+                    <!-- Calories (Top Center) -->
+                    <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-center opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[200ms]"
+                     data-animate="up">
+                        <h4 class="font-bold text-orange-600 text-6xl">Calories</h4>
+                        <p class="text-gray-700 text-xl">357 kcal</p>
+                    </div>
+
+                    <!-- Vitamin B5 (Upper Left) -->
+                    <div 
+                    class="absolute top-10 left-5 flex flex-col items-end text-right max-w-[180px]
+                            opacity-0 -translate-x-10 transition-all duration-700 ease-out"
+                    data-animate="left"
+                    >
+                    <h4 class="font-bold text-yellow-600 text-6xl">B<sub>5</sub></h4>
+                    <p class="text-gray-600 text-xl">0.11 mg (2% DV)<br/>Pantothenic acid</p>
+                    </div>
+
+                    <!-- Vitamin B9 (Middle Left) -->
+                    <div
+                    class="absolute top-1/2 left-0 -translate-y-1/2 flex flex-col items-end text-right max-w-[180px]
+                            opacity-0 -translate-x-10 transition-all duration-700 ease-out delay-[400ms]"
+                    data-animate="left"
+                    >
+                        <h4 class="font-bold text-yellow-600 text-6xl">B<sub>9</sub></h4>
+                        <p class="text-gray-600 text-xl">7 µg (2% DV)<br/>Folate</p>
+                    </div>
+
+                    <!-- Vitamin B1 (Lower Left) -->
+                    <div class="absolute bottom-10 left-5 flex flex-col items-end text-right max-w-[180px]
+                    opacity-0 -translate-x-10 transition-all duration-700 ease-out delay-[600ms]"
+                    data-animate="left">
+                        <h4 class="font-bold text-yellow-600 text-6xl">B<sub>1</sub></h4>
+                        <p class="text-gray-600 text-xl">0.001 mg (0% DV)<br/>Thiamin</p>
+                    </div>
+
+
+
+                    <div class="absolute top-10 right-5 flex flex-col items-start text-left max-w-[180px]
+                            opacity-0 translate-x-10 transition-all duration-700 ease-out"
+                    data-animate="right"
+                    >
+                        <h4 class="font-bold text-brown-600 text-6xl">Mn</h4>
+                        <p class="text-gray-600 text-xl">0.47 mg (20% DV)<br/>Manganese</p>
+                    </div>
+
+
+                    <!-- Cu (Middle Right) -->
+                    <div class="absolute top-1/2 right-2 -translate-y-1/2 flex flex-col items-start text-left max-w-[180px]
+                    opacity-0 translate-x-10 transition-all duration-700 ease-out delay-[400ms]"
+                    data-animate="right">
+                        <h4 class="font-bold text-brown-600 text-6xl">Cu</h4>
+                        <p class="text-gray-600 text-xl">0.04 mg (4% DV)<br/>Copper</p>
+                    </div>
+
+                    <!-- Ca (Lower Right) -->
+                    <div class="absolute bottom-10 right-12 flex flex-col items-start text-left max-w-[180px]
+                    opacity-0 translate-x-10 transition-all duration-700 ease-out delay-[600ms]"
+                    data-animate="right">
+                        <h4 class="font-bold text-brown-600 text-6xl">Ca</h4>
+                        <p class="text-gray-600 text-xl">40 mg (3% DV)<br/>Calcium</p>
+                    </div>
+
+                  
+                    </div>
+                </div>
+                </div>
+
+                <!-- Bottom Stats -->
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-6 mt-12 text-center">
+                <div
+                class="opacity-0 translate-y-10 transition-all duration-700 ease-out "
+                data-animate="up"
+                >
+                <h4 class="font-bold text-orange-600 text-6xl">Water</h4>
+                <p class="text-gray-700 text-xl">0.14 g</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Protein</h4>
+                    <p class="text-gray-700 text-xl">0.3 g (1% DV)</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Carbs</h4>
+                    <p class="text-gray-700 text-xl">88.2 g (29% DV)</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[800ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Fats</h4>
+                    <p class="text-gray-700 text-xl">0.1 g (0% DV)</p>
+                </div>
+                <div class="opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                data-animate="up">
+                    <h4 class="font-bold text-orange-600 text-6xl">Fiber</h4>
+                    <p class="text-gray-700 text-xl">3.4 g (14% DV)</p>
+                </div>
+                </div>
+
+                <!-- Footer Note -->
+                <p class="mt-6 text-sm text-gray-500 text-center max-w-2xl mx-auto opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                data-animate="up">
+                Less than 2% DV minerals: Magnesium, Zinc, Phosphorus & Potassium. <br>
+                Sources: USDA National Nutrient Database. Average Daily Values reference: NHI Dietary Supplement Label Data Base.
+                </p>
+            </div>
+            </section>
+
+        <!-- HIGHLIGHT CARDS -->
+        <section class="mt-20 bg-beige px-4 sm:px-8 lg:px-20" style="background-color: #d2bfa3;">
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-52 min-h-[60vh]">
+                <!-- Left: Icon cards -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-8 lg:gap-12">
+                    <!-- Card 1 -->
+                    <div class="flex flex-col items-center text-center w-60 opacity-0 translate-y-10 transition-all duration-700 ease-out"
+                        data-animate="up">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                            <img src="../static/pictures/icon1.png" alt="Digestive Health" class="w-10 h-10 sm:w-12 sm:h-12" />
+                        </div>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">Supports Digestive Health</h3>
+                        <p class="text-gray-600 text-sm">Arrowroot is gentle on the stomach and aids in digestion, making it beneficial for individuals with sensitive digestive systems or recovering from illness.</p>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="flex flex-col items-center text-center w-60 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                        data-animate="up">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                            <img src="../static/pictures/icon2.png" alt="Gluten Free" class="w-10 h-10 sm:w-12 sm:h-12" />
+                        </div>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">Gluten-Free Alternative</h3>
+                        <p class="text-gray-600 text-sm">As a naturally gluten-free starch, arrowroot serves as a safe and versatile thickening agent for people with celiac disease or gluten intolerance.</p>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="flex flex-col items-center text-center w-60 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms]"
+                        data-animate="up">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white flex items-center justify-center shadow-md mb-4">
+                            <img src="../static/pictures/icon3.png" alt="Nutrient Efficient" class="w-10 h-10 sm:w-12 sm:h-12" />
+                        </div>
+                        <h3 class="font-semibold text-lg text-gray-800 mb-2">Nutrient-Rich</h3>
+                        <p class="text-gray-600 text-sm">Arrowroot contains essential nutrients such as potassium, iron, and B vitamins, which contribute to healthy energy levels, improved circulation, and overall well-being.</p>
+                    </div>
+                </div>
+                <!-- Right: Arrowroot image -->
+                <div class="overflow-hidden max-w-[500px] flex items-center justify-center opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                 data-animate="up">
+                    <img
+                        src="../static/pictures/ArrowRoot.png"
+                        alt="Arrowroot"
+                        class="w-[500px] h-[500px] object-contain opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[1000ms]"
+                        data-animate="up"
+                        style="min-width:500px; min-height:500px;"
+                    />
+                </div>
+            </div>
+        </section>
+        
+        <!-- INTERACTIVE PLANT GROWTH -->
+        <section class="mt-20 pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-6xl font-bold text-center text-green-700 mb-12 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[400ms]"
+                    data-animate="up">Arrowroot Growth Journey</h2>
+                
+                <!-- Main Content Area -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <!-- Left: Image Display Area with Range Slider -->
+                    <div class="bg-white rounded-2xl  p-8 opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[600ms]"
+                         data-animate="up">
+                        <div class="relative flex justify-center items-center mb-8">
+                            <div class="w-full max-w-2xl aspect-square flex justify-center items-center rounded-xl overflow-hidden relative">
+                                <!-- All images stacked on top of each other -->
+                                <img id="growthImage1" src="../static/pictures/scene1.png" alt="Arrowroot Growth Stage 1" 
+                                     class="absolute inset-0 w-full h-full object-contain transition-all duration-300 ease-out opacity-100" />
+                                <img id="growthImage2" src="../static/pictures/scene2.png" alt="Arrowroot Growth Stage 2" 
+                                     class="absolute inset-0 w-full h-full object-contain transition-all duration-300 ease-out opacity-0" />
+                                <img id="growthImage3" src="../static/pictures/scene3.png" alt="Arrowroot Growth Stage 3" 
+                                     class="absolute inset-0 w-full h-full object-contain transition-all duration-300 ease-out opacity-0" />
+                                <img id="growthImage4" src="../static/pictures/scene4.png" alt="Arrowroot Growth Stage 4" 
+                                     class="absolute inset-0 w-full h-full object-contain transition-all duration-300 ease-out opacity-0" />
+                                <img id="growthImage5" src="../static/pictures/scene5.png" alt="Arrowroot Growth Stage 5" 
+                                     class="absolute inset-0 w-full h-full object-contain transition-all duration-300 ease-out opacity-0" />
+                                <img id="growthImage6" src="../static/pictures/scene6.png" alt="Arrowroot Growth Stage 6" 
+                                     class="absolute inset-0 w-full h-full object-contain transition-all duration-300 ease-out opacity-0" />
+                            </div>
+                        </div>
+                        
+                        <!-- Range Slider -->
+                        <div>
+                            <input type="range" id="growthSlider" min="1" max="6" value="1" step="0.1"
+                                   class="w-full h-3 bg-gradient-to-r from-green-200 to-green-600 rounded-lg appearance-none cursor-pointer slider smooth-slider">
+                            <div class="flex justify-between text-sm text-gray-600 mt-2 px-2">
+                                <span>Day 1</span>
+                                <span>Week 2</span>
+                                <span>1 Month</span>
+                                <span>2-4 Months</span>
+                                <span>5-7 Months</span>
+                                <span>8-12 Months</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: Stage Information -->
+                    <div class="lg:pl-8">
+                        <div id="stageInfo" class=" rounded-xl p-6  h-full flex flex-col justify-center overflow-hidden">
+                            <h3 id="stageTitle" class="text-2xl font-bold text-green-800 mb-4 transition-all duration-500 ease-out transform text-5xl">Seed/Tuber Stage (Day 1 – Week 2)</h3>
+                            <div id="stageDescription" class="text-gray-700 text-2xl leading-relaxed transition-all duration-500 ease-out transform">
+                                <p class="mb-3 ">• Planting starts with rhizomes (not true seeds).</p>
+                                <p>• Sprouts begin to emerge after a few days to 2 weeks.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer Description -->
+                <div class="mt-12 text-center max-w-4xl mx-auto opacity-0 translate-y-10 transition-all duration-700 ease-out delay-[800ms]"
+                     data-animate="up">
+                    <p class="text-lg text-gray-600 leading-relaxed">
+                        Arrowroot begins from a planted rhizome, sprouting into seedlings within two weeks. The plant grows steadily, producing tall leafy stems and roots over the next few months. By 5–7 months, tubers start swelling underground while leaves may flower above. After 8–10 months, the plant reaches maturity with fully formed tubers. At 10–12 months, when the leaves begin to dry, arrowroot is ready for harvest.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <style>
+            /* Custom slider styling */
+            .slider::-webkit-slider-thumb {
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #059669;
+                cursor: pointer;
+                border: 2px solid white;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            }
+            
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #059669;
+                cursor: pointer;
+                border: 2px solid white;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            }
+            
+            /* Smooth slider movement */
+            .smooth-slider {
+                transition: all 0.08s ease-out;
+                opacity: 0.3; /* Default auto-play opacity */
+            }
+            
+            .smooth-slider:not(:active) {
+                transition: all 0.08s ease-out;
+            }
+            
+            .smooth-slider:hover,
+            .smooth-slider:active,
+            .smooth-slider:focus {
+                opacity: 1; /* Full opacity when interacting */
+            }
+            
+            .smooth-slider.user-interacting {
+                opacity: 1; /* Full opacity during user interaction */
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const slider = document.getElementById('growthSlider');
+                const stageTitle = document.getElementById('stageTitle');
+                const stageDescription = document.getElementById('stageDescription');
+                
+                // Auto-play variables
+                let autoPlayInterval = null;
+                let currentValue = 1;
+                const autoPlaySpeed = 0.035; // Faster auto-play speed
+                const intervalDelay = 80; // Smoother interval (80ms between updates)
+                let isUserDragging = false;
+                let isPaused = false; // For end pause
+                let pauseTimeout = null;
+                let lastDisplayedStage = 1; // Track last displayed stage for animation
+                
+                // Get all image elements
+                const images = [
+                    document.getElementById('growthImage1'),
+                    document.getElementById('growthImage2'),
+                    document.getElementById('growthImage3'),
+                    document.getElementById('growthImage4'),
+                    document.getElementById('growthImage5'),
+                    document.getElementById('growthImage6')
+                ];
+                
+                const stages = {
+                    1: {
+                        title: 'Seed/Tuber Stage (Day 1 – Week 2)',
+                        description: `
+                            <p class="mb-2">• Planting starts with rhizomes (not true seeds).</p>
+                            <p>• Sprouts begin to emerge after a few days to 2 weeks.</p>
+                        `
+                    },
+                    2: {
+                        title: 'Seedling Stage (Week 2 – 1 Month)',
+                        description: `
+                            <p class="mb-2">• Small shoots with 2–3 leaves appear.</p>
+                            <p>• Roots begin developing, establishing in the soil.</p>
+                        `
+                    },
+                    3: {
+                        title: 'Early Vegetative Stage (1 – 2 Months)',
+                        description: `
+                            <p class="mb-2">• Stem elongates with more leaves forming.</p>
+                            <p class="mb-2">• Root system grows deeper.</p>
+                            <p>• Plants reach about 20–40 cm tall.</p>
+                        `
+                    },
+                    4: {
+                        title: 'Vegetative Expansion Stage (2 – 4 Months)',
+                        description: `
+                            <p class="mb-2">• Vigorous leafy growth, plant gets bushy.</p>
+                            <p>• Rhizomes (arrowroot tubers) start forming underground, but still small.</p>
+                        `
+                    },
+                    5: {
+                        title: 'Flowering & Tuber Development Stage (5 – 7 Months)',
+                        description: `
+                            <p class="mb-2">• Some plants may produce small flowers.</p>
+                            <p>• Tubers thicken significantly and become the main storage organ.</p>
+                        `
+                    },
+                    6: {
+                        title: 'Mature & Harvest Stage (8 – 12 Months)',
+                        description: `
+                            <p class="mb-2">• Leaves start yellowing and drying.</p>
+                            <p class="mb-2">• Tubers are fully developed, reaching harvest size.</p>
+                            <p class="mb-2">• Rhizomes are dug up for use.</p>
+                            <p>• Plants above ground are typically dry or withered.</p>
+                        `
+                    }
+                };
+                
+                function updateStage(sliderValue) {
+                    // Calculate which stages to show and their opacity
+                    const stage = Math.floor(sliderValue);
+                    const progress = sliderValue - stage;
+                    
+                    // Hide all images first
+                    images.forEach((img, index) => {
+                        img.style.opacity = '0';
+                    });
+                    
+                    // Show current stage
+                    if (stage >= 1 && stage <= 6) {
+                        images[stage - 1].style.opacity = '1';
+                    }
+                    
+                    // Show transition to next stage if in between
+                    if (progress > 0 && stage < 6) {
+                        images[stage - 1].style.opacity = (1 - progress).toString();
+                        images[stage].style.opacity = progress.toString();
+                    }
+                    
+                    // Update text information with slide animation (only when crossing integer values)
+                    const currentStage = Math.round(sliderValue);
+                    if (stages[currentStage] && (currentStage !== lastDisplayedStage)) {
+                        // Start slide up animation
+                        stageTitle.style.transform = 'translateY(20px)';
+                        stageTitle.style.opacity = '0';
+                        stageDescription.style.transform = 'translateY(20px)';
+                        stageDescription.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            stageTitle.textContent = stages[currentStage].title;
+                            stageDescription.innerHTML = stages[currentStage].description;
+                            
+                            // Slide back to normal position
+                            stageTitle.style.transform = 'translateY(0)';
+                            stageTitle.style.opacity = '1';
+                            stageDescription.style.transform = 'translateY(0)';
+                            stageDescription.style.opacity = '1';
+                        }, 250);
+                        
+                        lastDisplayedStage = currentStage;
+                    }
+                    
+                    // Update slider position only if not being dragged by user
+                    if (!isUserDragging) {
+                        slider.value = sliderValue;
+                    }
+                }
+                
+                function startAutoPlay() {
+                    if (autoPlayInterval) return;
+                    
+                    autoPlayInterval = setInterval(() => {
+                        if (!isUserDragging && !isPaused) {
+                            currentValue += autoPlaySpeed;
+                            
+                            // Check if reaching the end
+                            if (currentValue >= 6) {
+                                currentValue = 6;
+                                updateStage(currentValue);
+                                
+                                // Pause for 2 seconds at the end
+                                isPaused = true;
+                                pauseTimeout = setTimeout(() => {
+                                    currentValue = 1; // Reset to beginning
+                                    isPaused = false;
+                                }, 2000);
+                            } else {
+                                updateStage(currentValue);
+                            }
+                        }
+                    }, intervalDelay);
+                }
+                
+                // Event listeners
+                slider.addEventListener('mousedown', function() {
+                    isUserDragging = true;
+                    this.classList.add('user-interacting');
+                });
+                
+                slider.addEventListener('mouseup', function() {
+                    // Update currentValue to where user dragged and continue from there
+                    currentValue = parseFloat(this.value);
+                    isUserDragging = false;
+                    
+                    // Clear any existing pause if user interacts
+                    if (pauseTimeout) {
+                        clearTimeout(pauseTimeout);
+                        pauseTimeout = null;
+                        isPaused = false;
+                    }
+                    
+                    // Remove user interaction class after a delay
+                    setTimeout(() => {
+                        this.classList.remove('user-interacting');
+                    }, 1000);
+                });
+                
+                slider.addEventListener('input', function() {
+                    if (isUserDragging) {
+                        updateStage(parseFloat(this.value));
+                    }
+                });
+                
+                // Touch events for mobile
+                slider.addEventListener('touchstart', function() {
+                    isUserDragging = true;
+                    this.classList.add('user-interacting');
+                });
+                
+                slider.addEventListener('touchend', function() {
+                    currentValue = parseFloat(this.value);
+                    isUserDragging = false;
+                    
+                    // Clear any existing pause if user interacts
+                    if (pauseTimeout) {
+                        clearTimeout(pauseTimeout);
+                        pauseTimeout = null;
+                        isPaused = false;
+                    }
+                    
+                    // Remove user interaction class after a delay
+                    setTimeout(() => {
+                        this.classList.remove('user-interacting');
+                    }, 1000);
+                });
+                
+                // Initialize with first stage and start auto-play
+                updateStage(1);
+                startAutoPlay();
+            });
+        </script>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-50 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="md:flex md:items-start md:justify-between">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-fullflex items-center justify-center">
+                            <img src="../static/pictures/main logo.png" alt="Logo" class="w-10 h-10" />
+                        </div>
+                        <div>
+                            <p class="font-semibold text-gn-800">Rooted Knowledge</p>
+                            <p class="text-sm text-gray-500 mt-1">Plants, pots & care — delivered with love.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8 md:mt-0 grid grid-cols-2 gap-6 sm:grid-cols-4">
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Shop</h5>
+                        <ul class="mt-3 text-sm text-gray-500 space-y-2">
+                            <li><a href="#">All Plants</a></li>
+                            <li><a href="#">New Arrivals</a></li>
+                            <li><a href="#">Pots & Tools</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Company</h5>
+                        <ul class="mt-3 text-sm text-gray-500 space-y-2">
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Contact</a></li>
+                            <li><a href="#">Careers</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Help</h5>
+                        <ul class="mt-3 text-sm text-gray-500 space-y-2">
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 class="text-sm font-semibold text-gray-700">Follow</h5>
+                        <div class="mt-3 flex gap-3">
+                            <a class="p-2 rounded-lg bg-white shadow-soft" href="#" aria-label="facebook">FB</a>
+                            <a class="p-2 rounded-lg bg-white shadow-soft" href="#" aria-label="instagram">IG</a>
+                            <a class="p-2 rounded-lg bg-white shadow-soft" href="#" aria-label="twitter">TW</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10 text-sm text-gray-500 text-center border-t border-gray-100 pt-6">
+                © GreenNest — 2025. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Minimal JS: mobile menu toggle, product fills, reveal on scroll -->
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Populate product grid with placeholders
+        const productContainer = document.querySelector('section.mt-20.pb-20 .grid.grid-cols-1.sm\\:grid-cols-2');
+        const template = document.getElementById('productTemplate').content;
+        const images = [
+            'https://source.unsplash.com/400x400/?monstera',
+            'https://source.unsplash.com/400x400/?pothos',
+            'https://source.unsplash.com/400x400/?succulent',
+            'https://source.unsplash.com/400x400/?ficus',
+            'https://source.unsplash.com/400x400/?calathea',
+            'https://source.unsplash.com/400x400/?philodendron',
+            'https://source.unsplash.com/400x400/?snake-plant',
+            'https://source.unsplash.com/400x400/?alocasia'
+        ];
+        const gridParent = document.querySelector('section.mt-20.pb-20 .max-w-7xl .grid.grid-cols-1.sm\\:grid-cols-2.md\\:grid-cols-3.lg\\:grid-cols-4');
+        if (gridParent) {
+            images.forEach((src, i) => {
+                const node = document.importNode(template, true);
+                node.querySelector('img').src = src;
+                node.querySelector('h4').textContent = ['Monstera Deliciosa','Devil\'s Ivy','Echeveria','Ficus Lyrata','Calathea Orbifolia','Philodendron','Snake Plant','Alocasia'][i];
+                node.querySelector('p').textContent = ['$' + (18 + i*4).toFixed(2)];
+                gridParent.appendChild(node);
+            });
+        }
+
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('show');
+            });
+        }, {threshold: 0.12});
+        reveals.forEach(r => io.observe(r));
+    </script>
+</body>
+</html>
