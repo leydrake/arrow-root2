@@ -41,7 +41,7 @@ def login_view(request):
                 # Role-based redirect
                 if user.is_staff or user.is_superuser:
                     return redirect('dashboard')
-                return redirect('account_profile')
+                return redirect('user_dashboard')
             else:
                 messages.error(request, 'Invalid email/username or password.')
         else:
@@ -103,6 +103,10 @@ def home(request):
 @login_required
 def account_profile(request):
     return render(request, "accountprofile.html", {"user": request.user})
+
+@login_required
+def user_dashboard(request):
+    return render(request, "dashboard.html", {"user": request.user})
 
 @login_required
 def planting_view(request):
